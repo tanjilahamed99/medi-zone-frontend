@@ -2,11 +2,17 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { IoStar, IoStarOutline } from "react-icons/io5";
+import React from "react";
 import { MdOutlineAttachMoney } from "react-icons/md";
-import Rating from "react-rating";
+import { product } from "./productType";
 
-const MedicineCard = ({ data }: any) => {
+type ProductsProps = {
+  data: product;
+};
+
+const MedicineCard: React.FC<ProductsProps> = ({ data }) => {
+  console.log(data);
+
   return (
     <div>
       <div className=" p-4 shadow rounded-md relative border">
@@ -29,21 +35,6 @@ const MedicineCard = ({ data }: any) => {
               <MdOutlineAttachMoney className="text-xl" />
               {data?.price}
             </p>
-            {/* ratings */}
-            <div>
-              <Rating
-                initialRating={data?.ratings ? data?.ratings : 2}
-                emptySymbol={
-                  <IoStarOutline className="text-2xl h-[24px] w-[25px] text-[#F9BF2D]" />
-                }
-                placeholderSymbol={
-                  <IoStarOutline className="text-2xl h-[24px] w-[25px] text-[#F9BF2D]" />
-                }
-                fullSymbol={
-                  <IoStar className="text-2xl h-[24px] w-[25px] text-[#F9BF2D]" />
-                }
-              />
-            </div>
           </div>
 
           <Link href={`/productsDetails?id=${data?._id}`}>
