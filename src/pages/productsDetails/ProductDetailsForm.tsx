@@ -16,15 +16,12 @@ import Rating from "react-rating";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 
-interface ProductDetailsFormProps {
-  id: string;
-}
 
-const ProductDetailsForm: React.FC<ProductDetailsFormProps> = ({ id }) => {
+const ProductDetailsForm = ({ id }) => {
   const { data, error } = useGetSingleProductsQuery(id);
   const [quantity, setQuantity] = useState(1);
   const dispatch = useDispatch();
-  const { myCart } = useSelector((state: any) => state?.myCart);
+  const { myCart } = useSelector((state) => state?.myCart);
   const { data: user } = useSession();
 
   const handleIncrease = () => {
@@ -35,7 +32,7 @@ const ProductDetailsForm: React.FC<ProductDetailsFormProps> = ({ id }) => {
     setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : 1));
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e) => {
     const value = parseInt(e.target.value, 10);
     if (!isNaN(value) && value > 0) {
       setQuantity(value);
@@ -54,7 +51,7 @@ const ProductDetailsForm: React.FC<ProductDetailsFormProps> = ({ id }) => {
     }
 
     const exist = myCart?.myCartsData?.find(
-      (item: any) => item?.name === data?.product?.name
+      (item) => item?.name === data?.product?.name
     );
     // Calculate total price without discount
     const totalPriceWithoutDiscount = data?.product?.price * quantity;

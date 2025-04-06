@@ -13,7 +13,7 @@ const FeaturedProducts = () => {
 
       {/* content */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 items-center gap-6 mt-4">
-        {data?.products?.slice(0,8).map((i: object, idx: any) => (
+        {data?.products?.slice(0, 8).map((i, idx) => (
           <MedicineCard key={idx} data={i} />
         ))}
       </div>

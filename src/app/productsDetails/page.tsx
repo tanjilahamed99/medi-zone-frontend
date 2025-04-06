@@ -1,6 +1,6 @@
 import ProductDetailsForm from "@/pages/productsDetails/ProductDetailsForm";
 
-const page = ({ searchParams }: any) => {
+const page = ({ searchParams }) => {
   const id = searchParams?.id;
 
   return (
