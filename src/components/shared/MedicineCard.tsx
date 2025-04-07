@@ -11,7 +11,6 @@ type ProductsProps = {
 };
 
 const MedicineCard: React.FC<ProductsProps> = ({ data }) => {
-  console.log(data);
 
   return (
     <div>

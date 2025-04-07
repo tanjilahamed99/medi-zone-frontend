@@ -17,3 +17,16 @@ export type product = {
   type: string;
   _id: string;
 };
+
+export type MyCart = {
+  userEmail: string;
+  userName: string;
+  myCartsData: product[];
+};
+
+export type CartState = {
+  myCart: MyCart;
+  isPending: boolean;
+  isRejected: boolean;
+};
+

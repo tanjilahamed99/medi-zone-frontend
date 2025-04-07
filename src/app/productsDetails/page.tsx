@@ -1,6 +1,12 @@
 import ProductDetailsForm from "@/pages/productsDetails/ProductDetailsForm";
 
-const page = ({ searchParams }) => {
+type props = {
+  searchParams: {
+    id?: string;
+  };
+};
+
+const page = ({ searchParams }: props) => {
   const id = searchParams?.id;
 
   return (

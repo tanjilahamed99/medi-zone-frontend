@@ -5,24 +5,49 @@ import SectionTitle from "@/components/shared/SectionTitle";
 import { useGetSingleProductsQuery } from "@/redux/rtk/fetchData";
 import { addItems } from "@/redux/slice/myCart/myCart";
 import { BASE_URL } from "@/utils/url";
+import { RootState } from "@reduxjs/toolkit/query";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { redirect } from "next/navigation";
 import { useState } from "react";
-import { IoStar, IoStarOutline } from "react-icons/io5";
 import { MdOutlineAttachMoney } from "react-icons/md";
-import Rating from "react-rating";
 import { useDispatch, useSelector } from "react-redux";
 import Swal from "sweetalert2";
 
+type props = {
+  id?: string;
+};
 
-const ProductDetailsForm = ({ id }) => {
+type productsDetails = {
+  products: {
+    category: string;
+    company: string;
+    description: string;
+    discount: number;
+    image: string[];
+    images: string[];
+    metaKey: string;
+    name: string;
+    popular: boolean;
+    price: number;
+    quantity: number;
+    ratings: string;
+    review: string[];
+    stack: boolean;
+    status: boolean;
+    type: string;
+    _id: string;
+  };
+};
+
+const ProductDetailsForm = ({ id }: props) => {
   const { data, error } = useGetSingleProductsQuery(id);
   const [quantity, setQuantity] = useState(1);
   const dispatch = useDispatch();
-  const { myCart } = useSelector((state) => state?.myCart);
+  const { myCart } = useSelector((state: RootState) => state?.myCart);
   const { data: user } = useSession();
+
+  console.log(myCart);
 
   const handleIncrease = () => {
     setQuantity((prevQuantity) => prevQuantity + 1);
@@ -221,7 +246,7 @@ const ProductDetailsForm = ({ id }) => {
             </p>
             {/* Ratings */}
             <div className="flex items-center gap-3">
-              <Rating
+              {/* <Rating
                 initialRating={data?.product?.ratings || 2}
                 emptySymbol={
                   <IoStarOutline className="text-xl h-[24px] w-[25px] text-[#F9BF2D]" />
@@ -229,7 +254,7 @@ const ProductDetailsForm = ({ id }) => {
                 fullSymbol={
                   <IoStar className="text-xl h-[24px] w-[25px] text-[#F9BF2D]" />
                 }
-              />
+              /> */}
               <h3 className="text-primary-text font-semibold">
                 ({data?.product?.review?.length} customer reviews)
               </h3>
