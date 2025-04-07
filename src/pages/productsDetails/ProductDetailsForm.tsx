@@ -44,7 +44,7 @@ const ProductDetailsForm = ({ id }: props) => {
   const { data, error } = useGetSingleProductsQuery(id);
   const [quantity, setQuantity] = useState(1);
   const dispatch = useDispatch();
-  const { myCart } = useSelector((state: RootState) => state?.myCart);
+  const { myCart } = useSelector((state: any) => state?.myCart);
   const { data: user } = useSession();
 
   console.log(myCart);
@@ -57,7 +57,7 @@ const ProductDetailsForm = ({ id }: props) => {
     setQuantity((prevQuantity) => (prevQuantity > 1 ? prevQuantity - 1 : 1));
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value, 10);
     if (!isNaN(value) && value > 0) {
       setQuantity(value);
@@ -76,7 +76,7 @@ const ProductDetailsForm = ({ id }: props) => {
     }
 
     const exist = myCart?.myCartsData?.find(
-      (item) => item?.name === data?.product?.name
+      (item: any) => item?.name === data?.product?.name
     );
     // Calculate total price without discount
     const totalPriceWithoutDiscount = data?.product?.price * quantity;
@@ -134,7 +134,7 @@ const ProductDetailsForm = ({ id }: props) => {
           updatedData
         );
         if (res?.status) {
-          dispatch(addItems(updatedData));
+          // dispatch(addItems(updatedData));
           Swal.fire({
             title: "Good job!",
             text: `You parches ${quantity}  ${data?.product?.name} at ${finalPrice}`,
@@ -161,7 +161,7 @@ const ProductDetailsForm = ({ id }: props) => {
         };
         const { data: res } = await axios.post(`${BASE_URL}/carts`, myData);
         if (res?.status) {
-          dispatch(addItems(myData));
+          // dispatch(addItems(myData));
           Swal.fire({
             title: "Good job!",
             text: `You parches ${quantity}  ${data?.product?.name} at ${finalPrice}`,
@@ -172,7 +172,7 @@ const ProductDetailsForm = ({ id }: props) => {
     } else {
       const { data: res } = await axios.post(`${BASE_URL}/carts`, myData);
       if (res?.status) {
-        dispatch(addItems(myData));
+        // dispatch(addItems(myData));
         Swal.fire({
           title: "Good job!",
           text: `You parches ${quantity}  ${data?.product?.name} at ${finalPrice}`,

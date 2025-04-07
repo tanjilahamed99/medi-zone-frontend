@@ -1,8 +1,23 @@
 import axios from "axios";
 import CredentialsProvider from "next-auth/providers/credentials";
+import type { AuthOptions, User } from "next-auth";
+import type { JWT } from "next-auth/jwt";
 import { BASE_URL } from "@/utils/url";
 
-export const options = {
+interface Credentials {
+  email: string;
+  password: string;
+}
+
+interface ExtendedUser extends User {
+  _id?: string;
+  provider?: string;
+  socialId?: string;
+  status?: string;
+  role?: string;
+}
+
+export const options: AuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
@@ -10,11 +25,9 @@ export const options = {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials, req) {
+      async authorize(credentials: Record<keyof Credentials, string> | undefined) {
         const { email, password } = credentials || {};
-        if (!email || !password) {
-          return null;
-        }
+        if (!email || !password) return null;
 
         try {
           const response = await axios.post(`${BASE_URL}/auth/authorize-user`, {
@@ -24,9 +37,7 @@ export const options = {
 
           const { status, data: user } = response.data;
 
-          if (!status) {
-            return null; // Handle backend errors
-          }
+          if (!status) return null;
 
           return {
             id: user?._id?.toString(),
@@ -34,17 +45,17 @@ export const options = {
             name: user?.name,
             image: user?.image,
             provider: "credentials",
-          };
+          } as ExtendedUser;
         } catch (error) {
           console.error("Error in authorization:", error);
-          return null; // Handle API request errors
+          return null;
         }
       },
     }),
   ],
   secret: "secret-top",
   callbacks: {
-    async signIn({ user, account }: any) {
+    async signIn({ user, account }: { user: ExtendedUser; account: any }) {
       if (["google", "facebook"].includes(account.provider)) {
         try {
           const response = await axios.post(`${BASE_URL}/auth/register`, {
@@ -65,7 +76,7 @@ export const options = {
           user.provider = newUser?.provider;
 
           return true;
-        } catch (error) {
+        } catch (error: any) {
           console.error("Error in social sign-in:", error?.message);
           return false;
         }
@@ -73,28 +84,26 @@ export const options = {
 
       return true;
     },
-    async redirect({ url, baseUrl }: any) {
-      // Allows relative callback URLs
+
+    async redirect({ url, baseUrl }: { url: string; baseUrl: string }) {
       if (url.startsWith("/")) return `${baseUrl}${url}`;
-      // Allows callback URLs on the same origin
       else if (new URL(url).origin === baseUrl) return url;
       return baseUrl;
     },
-    async session({ session, token }: any) {
+
+    async session({ session, token }: { session: any; token: JWT }) {
       session.user = token?.user;
       return session;
     },
-    async jwt({ token, user, account }: any) {
+
+    async jwt({ token, user, account }: { token: JWT; user?: ExtendedUser; account?: any }) {
       if (account?.provider === "credentials") {
-        const provider = "email/pass";
         try {
           const response = await axios.get(
-            BASE_URL +
-              `/user/data?email=${user?.email}&provider=${provider}&socialId=${token?.sub}`
+            `${BASE_URL}/user/data?email=${user?.email}&provider=email/pass&socialId=${token?.sub}`
           );
-
           token.user = response.data;
-        } catch (error) {
+        } catch (error: any) {
           console.error("Error fetching user data:", error?.message);
         }
       } else {
@@ -113,10 +122,12 @@ export const options = {
       return token;
     },
   },
+
   pages: {
     signIn: "/signin",
     error: "/signin",
   },
+
   session: {
     strategy: "jwt",
   },

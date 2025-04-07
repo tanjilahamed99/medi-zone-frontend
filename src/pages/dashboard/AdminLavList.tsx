@@ -4,8 +4,9 @@ import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
+
 const AdminLavList = () => {
-  const { data: user, status } = useSession();
+  const { data: user, status }  = useSession();
   const path = usePathname();
   const router = useRouter();
   if (status === "unauthenticated") {
