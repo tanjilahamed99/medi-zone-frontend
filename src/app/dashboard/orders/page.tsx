@@ -77,7 +77,7 @@ const Orders = () => {
                     {i?.myCartsData?.length}
                   </th>
                   <th className="px-4 py-3 border text-center font-normal whitespace-nowrap cursor-pointer">
-                    Pending
+                    Pendin
                   </th>
                 </tr>
               ))}
