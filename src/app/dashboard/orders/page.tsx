@@ -29,7 +29,7 @@ const Orders = () => {
     <div className="p-5">
       <div className="bg-white w-full rounded-lg p-3 mb-4">
         <h2 className="text-primary-text font-semibold text-xl px-5">
-          All Orders
+          All Order
         </h2>
       </div>
 
